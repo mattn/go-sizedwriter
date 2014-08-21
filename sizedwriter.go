@@ -1,6 +1,7 @@
 package sizedwriter
 
 import (
+	"errors"
 	"io"
 	"os"
 )
@@ -30,6 +31,8 @@ func (sw *SizedWriter) Write(b []byte) (int, error) {
 				if err != nil {
 					return 0, err
 				}
+			} else {
+				return 0, errors.New("Can't write more")
 			}
 		}
 	}
