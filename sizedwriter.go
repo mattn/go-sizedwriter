@@ -23,11 +23,13 @@ func (sw *SizedWriter) Write(b []byte) (int, error) {
 	fi, err := os.Lstat(sw.Filename)
 	if err == nil {
 		if fi.Size()+int64(len(b)) > sw.Size {
-			sw.file.Close()
-			sw.file = nil
-			err = sw.Cb(sw)
-			if err != nil {
-				return 0, err
+			if sw.Cb != nil {
+				sw.file.Close()
+				sw.file = nil
+				err = sw.Cb(sw)
+				if err != nil {
+					return 0, err
+				}
 			}
 		}
 	}
