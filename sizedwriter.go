@@ -22,18 +22,22 @@ func NewSizedWriter(filename string, size int64, perm os.FileMode, over cb) io.W
 
 func (sw *SizedWriter) Write(b []byte) (int, error) {
 	fi, err := os.Lstat(sw.Filename)
+	var size int64
 	if err == nil {
-		if fi.Size()+int64(len(b)) > sw.Size {
-			if sw.Cb != nil {
-				sw.file.Close()
-				sw.file = nil
-				err = sw.Cb(sw)
-				if err != nil {
-					return 0, err
-				}
-			} else {
-				return 0, errors.New("Can't write more")
+		size = fi.Size() + int64(len(b))
+	} else if os.IsNotExist(err) {
+		size = int64(len(b))
+	}
+	if size > sw.Size {
+		if sw.Cb != nil {
+			sw.file.Close()
+			sw.file = nil
+			err = sw.Cb(sw)
+			if err != nil {
+				return 0, err
 			}
+		} else {
+			return 0, errors.New("Can't write more")
 		}
 	}
 
