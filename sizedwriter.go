@@ -19,7 +19,8 @@ type Writer struct {
 }
 
 // NewWriter create new writer with specified filename, size, permission,
-// and callback.
+// and callback. when file size reach the size, writer close the file
+// descriptor and call callback.
 func NewWriter(filename string, size int64, perm os.FileMode, over cb) io.WriteCloser {
 	return &Writer{filename, size, perm, over, nil}
 }
