@@ -8,6 +8,8 @@ import (
 
 type cb func(*Writer) error
 
+// Writer is a size-limited writer with specified size. When writer return
+// error when file size over the limited size.
 type Writer struct {
 	Filename string
 	Size     int64
@@ -16,10 +18,13 @@ type Writer struct {
 	file     *os.File
 }
 
+// NewWriter create new writer with specified filename, size, permission,
+// and callback.
 func NewWriter(filename string, size int64, perm os.FileMode, over cb) io.WriteCloser {
 	return &Writer{filename, size, perm, over, nil}
 }
 
+// Write write bytes into the file.
 func (sw *Writer) Write(b []byte) (int, error) {
 	fi, err := os.Lstat(sw.Filename)
 	var size int64
@@ -53,6 +58,7 @@ func (sw *Writer) Write(b []byte) (int, error) {
 	return n, err
 }
 
+// Close closes the file.
 func (sw *Writer) Close() error {
 	var err error
 	if sw.file != nil {
