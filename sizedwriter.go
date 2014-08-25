@@ -6,9 +6,9 @@ import (
 	"os"
 )
 
-type cb func(*SizedWriter) error
+type cb func(*Writer) error
 
-type SizedWriter struct {
+type Writer struct {
 	Filename string
 	Size     int64
 	Perm     os.FileMode
@@ -16,11 +16,11 @@ type SizedWriter struct {
 	file     *os.File
 }
 
-func NewSizedWriter(filename string, size int64, perm os.FileMode, over cb) io.WriteCloser {
-	return &SizedWriter{filename, size, perm, over, nil}
+func NewWriter(filename string, size int64, perm os.FileMode, over cb) io.WriteCloser {
+	return &Writer{filename, size, perm, over, nil}
 }
 
-func (sw *SizedWriter) Write(b []byte) (int, error) {
+func (sw *Writer) Write(b []byte) (int, error) {
 	fi, err := os.Lstat(sw.Filename)
 	var size int64
 	if err == nil {
@@ -53,7 +53,7 @@ func (sw *SizedWriter) Write(b []byte) (int, error) {
 	return n, err
 }
 
-func (sw *SizedWriter) Close() error {
+func (sw *Writer) Close() error {
 	var err error
 	if sw.file != nil {
 		err = sw.file.Close()

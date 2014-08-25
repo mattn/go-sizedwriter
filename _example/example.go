@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mattn/go-sizedwriter"
+	sw "github.com/mattn/go-sizedwriter"
 	"log"
 	"os"
 	"path/filepath"
@@ -10,7 +10,7 @@ import (
 
 func main() {
 	filename := "foo.log"
-	sw := sizedwriter.NewSizedWriter(filename, 500, 0644, func(sw *sizedwriter.SizedWriter) error {
+	sw := sw.NewWriter(filename, 500, 0644, func(sw *sw.Writer) error {
 		var newname string
 		for {
 			ext := filepath.Ext(sw.Filename)

@@ -3,7 +3,7 @@ package sizedwriter_test
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"github.com/mattn/go-sizedwriter"
+	sw "github.com/mattn/go-sizedwriter"
 	"os"
 	"path/filepath"
 	"testing"
@@ -20,7 +20,7 @@ func TestSimple(t *testing.T) {
 	defer os.Remove(filename)
 
 	limited := false
-	sw := sizedwriter.NewSizedWriter(filename, 500, 0644, func(sw *sizedwriter.SizedWriter) error {
+	sw := sw.NewWriter(filename, 500, 0644, func(sw *sw.Writer) error {
 		limited = true
 		return nil
 	})
@@ -65,7 +65,7 @@ func TestLimited(t *testing.T) {
 	defer os.Remove(filename)
 
 	limited := false
-	sw := sizedwriter.NewSizedWriter(filename, 500, 0644, func(sw *sizedwriter.SizedWriter) error {
+	sw := sw.NewWriter(filename, 500, 0644, func(sw *sw.Writer) error {
 		limited = true
 		return nil
 	})
