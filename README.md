@@ -5,7 +5,7 @@ Size limited writer
 ## Usage
 
 ```go
-sw := sizedwriter.NewSizedWriter(filename, 500, 0644, func(sw *sizedwriter.SizedWriter) error {
+sw := sizedwriter.NewWriter(filename, 500, 0644, func(sw *sizedwriter.Writer) error {
 	println("limited!")
 	return nil
 })
